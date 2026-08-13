@@ -1,63 +1,142 @@
-# Open Engineering Sites
+# Open Engineering Site
 
 <p align="center">
-  <img src="../assets/hero-banner.png" alt="Open Engineering Sites" width="100%">
+  <img src="../assets/hero-banner.png" alt="Open Engineering Site" width="100%">
 </p>
 
-Define places on the Web. Compose them from the ecosystem. Publish them as part of the whole.
+A site is a deployed, addressable place where Open Engineering becomes accessible.
 
-Open Engineering Sites is the home for website definitions within the Open Engineering ecosystem.
+Welcome to Open Engineering Site — the home of the implementation model, tooling, and reference implementations for individual sites in the Open Engineering ecosystem.
 
-A Site describes a web presence before it becomes a particular deployment.
+Where Open Engineering Sites defines what a site is, Open Engineering Site focuses on how a concrete site is realized.
 
-It defines what a site is, what it contains, which Open Engineering capabilities it exposes, how people and machines can navigate it, and how it relates to the wider ecosystem.
+A site turns composed engineering resources into something people, machines, agents, and other systems can actually visit and use.
 
-Definition
-    ↓
+⸻
+
+What is a Site?
+
+A Site is an addressable presentation and interaction surface for Open Engineering resources.
+
+It may expose:
+
+* documentation,
+* applications,
+* dashboards,
+* visualizations,
+* APIs,
+* learning material,
+* catalogs,
+* maps,
+* interactive experiences,
+* operational interfaces,
+* or combinations of these.
+
+A site is not necessarily just a traditional website.
+
+It is the boundary at which selected parts of the Open Engineering ecosystem are published, presented, discovered, and interacted with.
+
+For example:
+
+Open Engineering resources
+        │
+        ▼
+    Composition
+        │
+        ▼
+      Site
+        │
+        ▼
+https://open-engineering.io/...
+
+⸻
+
+Site vs. Sites
+
+The Open Engineering ecosystem deliberately separates definitions from implementations.
+
+Organization	Responsibility
+open-engineering-sites	Definitions, contracts, schemas, conventions, and lifecycle of sites
+open-engineering-site	Implementations and reference realizations of individual sites
+
+In short:
+
+Sites
+  │
+  │ defines
+  ▼
 Site
-    ↓
-Composition
-    ↓
-Implementation
-    ↓
-Deployment
-    ↓
-Web
+  │
+  │ implements
+  ▼
+Running site
 
-Sites turn Open Engineering resources into discoverable, navigable and interactive places.
+This separation allows many different site implementations to conform to the same shared model.
 
 ⸻
 
-Why Sites?
+Purpose
 
-Open Engineering is distributed across many independently owned resources:
+This organization exists to answer the practical question:
 
-* definitions
-* elements
-* capabilities
-* APIs
-* documentation
-* applications
-* visualizations
-* learning materials
-* packages
-* stories
-* media
-* runtime systems
+How do we turn an Open Engineering Site definition into a running, reachable experience?
 
-Those resources need places where people — and increasingly agents — can encounter and use them.
+A site implementation may therefore contain or coordinate:
 
-A website should therefore not merely be a collection of handcrafted pages.
-
-It should be possible to define, compose, generate, deploy, observe and evolve a site using the same engineering principles applied throughout Open Engineering.
-
-That is the purpose of Open Engineering Sites.
+Site Definition
+      │
+      ▼
+   Content
+      │
+      ├── Documentation
+      ├── Visualizations
+      ├── Applications
+      ├── APIs
+      └── Interactive experiences
+      │
+      ▼
+     Build
+      │
+      ▼
+   Deployment
+      │
+      ▼
+    Runtime
+      │
+      ▼
+open-engineering.io
 
 ⸻
 
-The Core Idea
+Repository Model
 
-A Site is a declarative description of a web presence.
+The primary implementation work belongs in:
+
+open-engineering-site/source
+
+A typical implementation can evolve toward a structure such as:
+
+source/
+├── README.md
+├── site.yaml
+├── content/
+├── components/
+├── layouts/
+├── assets/
+├── public/
+├── adapters/
+├── integrations/
+├── deployment/
+├── tests/
+└── examples/
+
+The exact structure should remain driven by the contracts defined by Open Engineering Sites rather than by a particular frontend framework.
+
+⸻
+
+Site Manifest
+
+Every site should eventually be describable declaratively.
 
 For example:
 
@@ -65,499 +144,354 @@ apiVersion: open-engineering.io/v1alpha1
 kind: Site
 metadata:
   name: open-engineering
-  identifier: open-engineering-site
 spec:
-  domain: open-engineering.io
-  purpose:
-    - discover
-    - explain
-    - navigate
-    - interact
-  routes:
-    - path: /
-      role: home
-    - path: /academy
-      role: learning
-    - path: /map
-      role: discovery
+  hostname: open-engineering.io
+  source:
+    type: composition
   capabilities:
-    - search
-    - navigation
-    - visualization
     - documentation
+    - discovery
+    - visualization
+    - interaction
   deployment:
-    type: static
+    strategy: managed
 
-The exact specification will evolve.
+The manifest represents intent.
 
-The important principle is that the definition of the site is separate from its implementation.
-
-⸻
-
-Sites as Compositions
-
-A Site should rarely own everything it presents.
-
-Instead, it composes resources from elsewhere in Open Engineering.
-
-                         ┌────────────────────┐
-                         │        Site        │
-                         └─────────┬──────────┘
-                                   │
-                 ┌─────────────────┼─────────────────┐
-                 │                 │                 │
-                 ▼                 ▼                 ▼
-          Documentation       Applications      Visualizations
-                 │                 │                 │
-                 └─────────────────┼─────────────────┘
-                                   │
-                 ┌─────────────────┼─────────────────┐
-                 │                 │                 │
-                 ▼                 ▼                 ▼
-             APIs              Media             Academy
-                                   │
-                                   ▼
-                           Open Engineering
-                              Ecosystem
-
-The Site becomes a composition boundary between ecosystem resources and their web presentation.
+The site implementation is responsible for turning that intent into a functioning site.
 
 ⸻
 
-A Site Is More Than Pages
+Sites are Compositions
 
-A useful Site definition can describe several concerns.
+A site should not become another system of record containing copies of everything it presents.
 
-Identity
+Instead, it should compose resources from elsewhere in the ecosystem.
 
-What is this site?
+Definitions ───────┐
+Elements ──────────┤
+Picos ─────────────┤
+Capsules ──────────┤
+Visualizations ────┤
+Documentation ─────┤
+Applications ──────┤
+APIs ──────────────┤
+                   ▼
+               Composition
+                   │
+                   ▼
+                  Site
+                   │
+                   ▼
+                Visitor
 
-metadata:
-  name: Open Engineering
+This preserves one of the central principles of Open Engineering:
 
-Address
-
-Where does it live?
-
-domain: open-engineering.io
-
-Sites may also define subdomains such as:
-
-docs.open-engineering.io
-packages.open-engineering.io
-academy.open-engineering.io
-
-Information Architecture
-
-What does the visitor encounter?
-
-/
-├── academy/
-├── docs/
-├── map/
-├── packages/
-├── projects/
-└── about/
-
-Composition
-
-Where does the site’s information originate?
-
-sources:
-  - definitions
-  - documentation
-  - packages
-  - visualizations
-  - applications
-
-Capabilities
-
-What can visitors do?
-
-capabilities:
-  - browse
-  - search
-  - learn
-  - visualize
-  - interact
-
-Deployment
-
-How can the Site become operational?
-
-deployment:
-  target: web
-
-Observability
-
-How do we know the Site is working?
-
-A Site may define expectations for:
-
-* availability
-* performance
-* accessibility
-* telemetry
-* analytics
-* errors
-* broken links
-* deployment health
+Composition over duplication.
 
 ⸻
 
-Human and Machine Visitors
+Addressability
 
-Open Engineering Sites should be designed for two audiences.
+Sites give Open Engineering resources stable places in the public namespace.
 
-                    Site
-                     │
-             ┌───────┴───────┐
-             │               │
-             ▼               ▼
-          Humans           Agents
-             │               │
-             ▼               ▼
-           HTML         Structured Data
-           UI           APIs
-           Media        Metadata
-           Search       Semantic Graph
-           Docs         Machine Discovery
+The canonical domain is:
 
-Humans should receive a coherent web experience.
+open-engineering.io
 
-Agents should be able to discover the same ecosystem through structured, predictable and machine-readable interfaces.
+Sites may occupy paths:
 
-This makes Sites part of the AI-native interface layer of Open Engineering.
+https://open-engineering.io/
+https://open-engineering.io/academy/
+https://open-engineering.io/map/
+https://open-engineering.io/docs/
+
+or, where appropriate, subdomains:
+
+https://packages.open-engineering.io/
+
+The URL becomes part of the site’s identity and provides a human- and machine-addressable entry point into the ecosystem.
 
 ⸻
 
-Sites and the Open Engineering Map
+Declarative Delivery
 
-A Site should not become another isolated source of truth.
+The long-term goal is for a site to be deployable from declarative intent.
 
-Its definition should participate in the Open Engineering semantic graph.
+site.yaml
+    │
+    ▼
+Open Engineering Parser
+    │
+    ▼
+Open Engineering Composer
+    │
+    ▼
+Open Engineering Builder
+    │
+    ▼
+Deployment Resources
+    │
+    ▼
+Runtime Infrastructure
+    │
+    ▼
+Running Site
+
+This allows site creation to participate in the same engineering model as the rest of Open Engineering.
+
+A site should increasingly be something that is declared and composed, rather than manually assembled.
+
+⸻
+
+Relationship to Builders
+
+A Builder can transform the resources required by a Site into deployable artifacts.
 
 For example:
 
 Site
  │
- ├── hasDomain ─────────► Domain
+ ▼
+Builder
  │
- ├── exposes ───────────► Capability
+ ├── resolve resources
+ ├── validate contracts
+ ├── generate artifacts
+ ├── build frontend
+ └── package deployment
  │
- ├── contains ──────────► Page
- │
- ├── presents ──────────► Documentation
- │
- ├── presents ──────────► Visualization
- │
- ├── launches ──────────► Application
- │
- ├── references ────────► Definition
- │
- └── deployedBy ────────► Runtime
+ ▼
+Deployable Site
 
-This allows questions such as:
-
-Which sites expose this capability?
-
-Where can this definition be viewed?
-
-Which site presents this application?
-
-Which domain belongs to this Site?
-
-Which deployed Sites depend on this resource?
-
-Sites therefore become nodes in the wider Open Engineering graph rather than standalone web projects.
+This keeps the Site concerned with what should exist, while Builders determine how artifacts are produced.
 
 ⸻
 
-Definition vs. Implementation
+Relationship to Parsers
 
-Open Engineering deliberately separates what something means from one realization of it.
+Parsers allow site definitions and their referenced resources to be understood consistently.
 
-For Sites:
+Site Definition
+      │
+      ▼
+    Parser
+      │
+      ▼
+Normalized Model
+      │
+      ▼
+   Composer
 
-open-engineering-sites
-        │
-        │ defines
-        ▼
-      Site
-        │
-        │ instantiated by
-        ▼
- Site Implementation
-        │
-        │ deployed as
-        ▼
-   Running Website
-
-This separation makes it possible to change frameworks, hosting platforms and rendering technologies without changing the conceptual definition of a Site.
-
-A Site should not inherently mean:
-
-Svelte
-React
-Astro
-Next.js
-Deno
-Node.js
-Cloudflare
-Vercel
-GitHub Pages
-Kubernetes
-
-Those are implementation or deployment choices.
-
-The Site definition remains above them.
+A site therefore does not need to understand every source format itself.
 
 ⸻
 
-Example
+Relationship to Composers
 
-Imagine the primary Open Engineering web presence:
+Sites are natural consumers of composition.
 
-https://open-engineering.io
+A Composer can resolve a site into the collection of resources needed to present it:
 
-Its Site definition could express:
+Site
+ │
+ ├── Elements
+ ├── Definitions
+ ├── Documentation
+ ├── Applications
+ ├── Visualizations
+ ├── Assets
+ └── Capabilities
+      │
+      ▼
+   Composer
+      │
+      ▼
+Resolved Site
 
-kind: Site
-metadata:
-  name: Open Engineering
-spec:
-  domain: open-engineering.io
-  audience:
-    - engineers
-    - learners
-    - contributors
-    - agents
-  sections:
-    - ecosystem
-    - academy
-    - documentation
-    - map
-    - projects
-  capabilities:
-    - discovery
-    - search
-    - learning
-    - visualization
-  sources:
-    - github
-    - open-engineering-map
-    - open-engineering-academy
-
-A renderer could then turn that definition into an implementation.
-
-A deployment system could publish it.
-
-Observability could verify it.
-
-The Open Engineering Map could index it.
-
-Agents could discover it.
-
-Humans could browse it.
-
-One definition participates in the complete lifecycle.
+The resulting composition can then be handed to a Builder and deployment pipeline.
 
 ⸻
 
-Site Lifecycle
+Relationship to Open Engineering
 
-Idea
- │
- ▼
-Definition
- │
- ▼
-Validation
- │
- ▼
+A Site is one of the places where the architecture becomes tangible.
+
+Ontology
+   │
+   ▼
+Definitions
+   │
+   ▼
+Elements
+   │
+   ▼
 Composition
- │
- ▼
-Rendering
- │
- ▼
-Build
- │
- ▼
-Deployment
- │
- ▼
-Observation
- │
- ▼
-Evolution
+   │
+   ▼
+Runtime
+   │
+   ▼
+Site
+   │
+   ▼
+People + Agents + Systems
 
-Each stage should be independently replaceable and automatable.
+This makes Sites an important bridge between the internal engineering graph and its external representation.
+
+⸻
+
+Machine Readability
+
+Sites should be useful to agents as well as humans.
+
+Where practical, a Site should expose structured representations alongside its visual interface.
+
+For example:
+
+Human
+  │
+  └── HTML / UI
+Agent
+  │
+  ├── JSON
+  ├── JSON-LD
+  ├── APIs
+  └── semantic metadata
+Automation
+  │
+  ├── manifests
+  ├── events
+  └── machine-readable contracts
+
+The website is therefore not the entire Site.
+
+It is one representation of it.
 
 ⸻
 
 Design Principles
 
-Declarative
+Site implementations should follow several principles:
 
-Describe the desired Site rather than prescribing every implementation step.
+Declarative
+Describe the desired site rather than encoding deployment knowledge everywhere.
 
 Composable
+Reuse resources maintained elsewhere in Open Engineering.
 
-Sites assemble capabilities and resources already present elsewhere in the ecosystem.
-
-Portable
-
-A Site definition should not unnecessarily depend on a particular framework or hosting provider.
+Addressable
+Every meaningful published resource should have a stable identity and location.
 
 Discoverable
+Humans and machines should be able to understand what the site contains.
 
-Sites and their contents should participate in Open Engineering metadata and semantic discovery.
+Machine-readable
+Structured representations should accompany human-facing presentation where useful.
 
-Human-Friendly
-
-Machine readability must never come at the expense of a clear, accessible and enjoyable human experience.
-
-Agent-Friendly
-
-Important resources, actions and relationships should also be discoverable programmatically.
+Portable
+A Site definition should not unnecessarily depend on one hosting provider or frontend framework.
 
 Observable
+Builds, deployments, versions, failures, and runtime state should be visible.
 
-Deployment health, accessibility, performance and usage should be measurable.
+Reproducible
+The same definition and inputs should be capable of producing the same site.
 
-Open by Design
-
-Definitions, conventions and implementations should use open formats and remain portable wherever practical.
-
-⸻
-
-Relationship to Other Open Engineering Resources
-
-Sites sit near the outer edge of the ecosystem where engineered resources meet their audiences.
-
-Definitions
-     │
-Elements
-     │
-Capabilities
-     │
-Applications
-     │
-Documentation
-     │
-Visualizations
-     │
-Media
-     │
-     ▼
-   Sites
-     │
-     ▼
-   Web
-     │
- ┌───┴───┐
- ▼       ▼
-People  Agents
-
-A Site does not replace these resources.
-
-It presents and composes them.
-
-⸻
-
-Repository Direction
-
-The repositories maintained by this organization should focus on reusable Site definitions and specifications, rather than individual website implementations.
-
-A future source repository could evolve toward:
-
-source/
-├── README.md
-├── schema/
-│   └── site.schema.json
-├── definitions/
-│   ├── open-engineering/
-│   │   └── site.yaml
-│   ├── academy/
-│   │   └── site.yaml
-│   └── packages/
-│       └── site.yaml
-├── examples/
-│   ├── minimal/
-│   └── composed/
-├── docs/
-│   ├── concepts/
-│   ├── composition/
-│   └── lifecycle/
-└── tests/
-
-Over time this can become a catalog of reusable, validated Site definitions.
+Open by design
+Prefer open formats, explicit contracts, and replaceable implementations.
 
 ⸻
 
 A Small Example
 
-The smallest useful Site might be:
+Imagine a site definition declaring:
 
-apiVersion: open-engineering.io/v1alpha1
 kind: Site
 metadata:
-  name: hello-world
+  name: academy
 spec:
-  domain: hello.open-engineering.io
-  pages:
-    - path: /
-      title: Hello World
+  path: /academy
+  content:
+    - source: open-engineering-academy
+  capabilities:
+    - documentation
+    - learning
+    - search
 
-From that small definition, the ecosystem should eventually be able to:
+The Open Engineering toolchain could resolve this into:
 
-validate
-    ↓
-compose
-    ↓
-render
-    ↓
-build
-    ↓
-deploy
-    ↓
-observe
+Academy definition
+       │
+       ▼
+    Composer
+       │
+       ▼
+Academy resources
+       │
+       ▼
+     Builder
+       │
+       ▼
+Deployment artifact
+       │
+       ▼
+     Runtime
+       │
+       ▼
+open-engineering.io/academy/
 
-That is the direction.
+The important part is that the published Academy remains connected to its source definitions rather than becoming an isolated website.
 
 ⸻
 
-The Bigger Picture
+Direction
 
-The Web is one of the places where the Open Engineering ecosystem becomes tangible.
+The ambition is larger than hosting a collection of web pages.
 
-A visitor should not need to understand repositories, schemas, runtime architectures or semantic graphs before they can benefit from what has been engineered.
+Open Engineering Sites should make it possible to declare:
 
-Sites provide that bridge.
+“Make this part of the engineering ecosystem available here.”
 
-Engineering
-     ↓
+and allow the platform to determine how to compose, build, deploy, expose, observe, and maintain it.
+
+That gives Open Engineering a consistent path from:
+
+Meaning
+  ↓
+Definition
+  ↓
 Composition
-     ↓
-Site
-     ↓
-Experience
-
-They transform reusable engineering resources into coherent destinations.
-
-For humans.
-
-For machines.
-
-For agents.
-
-For whatever comes next.
+  ↓
+Execution
+  ↓
+Presentation
+  ↓
+Interaction
 
 ⸻
 
-Open Engineering Sites
+Status
 
-Define the destination. Compose the experience. Publish the ecosystem.
+This organization is under active development.
 
-🌐 Open Engineering — open-engineering.io
+Initial work should focus on:
+
+1. implementing the Site contracts defined by open-engineering-sites,
+2. defining a minimal site.yaml,
+3. creating a minimal reference Site,
+4. integrating with Open Engineering Parsers, Composers, and Builders,
+5. producing a reproducible deployment,
+6. exposing the result through open-engineering.io,
+7. adding machine-readable discovery and metadata,
+8. and documenting the complete Site lifecycle.
+
+⸻
+
+The Goal
+
+Open Engineering should eventually make publishing an engineering capability as deliberate and reproducible as deploying any other engineered system.
+
+Define it. Compose it. Build it. Deploy it. Visit it.
+
+That is an Open Engineering Site.
