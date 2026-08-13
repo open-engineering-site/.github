@@ -135,7 +135,7 @@ The exact structure should remain driven by the contracts defined by Open Engine
 
 ⸻
 
-#- Site Manifest
+## Site Manifest
 
 Every site should eventually be describable declaratively.
 
